@@ -8,13 +8,59 @@ function parseTweets(runkeeper_tweets) {
 	tweet_array = runkeeper_tweets.map(function(tweet) {
 		return new Tweet(tweet.text, tweet.created_at);
 	});
-	
-	$('#numberTweets').text(tweet_array.length);
-	//TODO: remove these
-	$('#firstDate').text(earliest_tweet.time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-	$('#lastDate').text(latest_tweet.time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-}
 
+	var compCount = 0;
+	for(var i = 0; i < tweet_array.length; i++){
+		if(tweet_array[i].source == "completed_event"){
+			compCount = compCount + 1;
+		}
+	}
+
+	var liveCount = 0;
+	for(var i = 0; i < tweet_array.length; i++){
+		if(tweet_array[i].source == "live_event"){
+			liveCount = liveCount + 1;
+		}
+	}
+
+	var achCount = 0;
+	for(var i =0; i < tweet_array.length; i++){
+		if(tweet_array[i].source == "achievement"){
+			achCount = achCount + 1;
+		}
+	}
+
+	var misCount = 0;
+	for(var i =0; i < tweet_array.length; i++){
+		if(tweet_array[i].source == "miscellaneous"){
+			misCount = misCount+1;
+		}
+	}
+
+	var writtenCount = 0;
+	for(var i =0; i < tweet_array.length; i++){
+		if(tweet_array[i].written ==  true){
+			writtenCount = writtenCount + 1;
+		}
+	}
+	$('#numberTweets').text(tweet_array.length);
+
+	$("#firstDate").text(tweet_array[tweet_array.length-1].time.toLocaleDateString('en-Us',{weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'}));
+	$("#lastDate").text(tweet_array[0].time.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'}));
+	$(".completedEvents").text(compCount); 
+	$(".completedEventsPct").text(math.format((compCount*100)/tweet_array.length,{notation: 'fixed', precision: 2})+"%");
+	$(".liveEvents").text(liveCount)
+	$(".liveEventsPct").text(math.format((liveCount*100)/tweet_array.length,{notation: 'fixed', precision: 2})+"%");
+	$(".achievements").text(achCount);
+	$(".achievementsPct").text(math.format((achCount*100)/tweet_array.length,{notation: 'fixed', precision: 2})+"%"
+	);
+	$(".miscellaneous").text(misCount);
+	$(".miscellaneousPct").text(math.format((misCount*100)/tweet_array.length,{notation:'fixed',precision:2})+"%");
+	$(".written").text(writtenCount);
+	$(".writtenPct").text(math.format((writtenCount*100)/tweet_array.length, {notation:'fixed', precision: 2})+"%");
+	
+
+}
 //Wait for the DOM to load
 $(document).ready(function() {
 	loadSavedRunkeeperTweets().then(parseTweets);
