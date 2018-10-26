@@ -4,7 +4,6 @@ function parseTweets(runkeeper_tweets) {
 		window.alert('No tweets returned');
 		return;
 	}
-
 	tweet_array = runkeeper_tweets.map(function(tweet) {
 		return new Tweet(tweet.text, tweet.created_at);
 	});
@@ -58,10 +57,24 @@ function parseTweets(runkeeper_tweets) {
 	$(".miscellaneousPct").text(math.format((misCount*100)/tweet_array.length,{notation:'fixed',precision:2})+"%");
 	$(".written").text(writtenCount);
 	$(".writtenPct").text(math.format((writtenCount*100)/tweet_array.length, {notation:'fixed', precision: 2})+"%");
-	
 
 }
+
 //Wait for the DOM to load
 $(document).ready(function() {
 	loadSavedRunkeeperTweets().then(parseTweets);
+	$("#liveButton").on("click", function(){
+	var $this = $(this);
+	if($this.text() == "Switch to live tweets"){
+		loadLiveRunkeeperTweets().then(parseTweets);
+		//$("#liveButton").text("Switch to saved tweets");
+		//location.reload();
+	}
+	else{
+		//fetch("twitter_proxy_config.json/1.1/search/tweets.json?q=#RunKeeper&lang-en")
+		loadSavedRunkeeperTweets().then(parseTweets);
+		
+		//$("#liveButton").text("Switch to live tweets");
+	}
+	});
 });

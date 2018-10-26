@@ -42,6 +42,7 @@ class Tweet {
         }
         //TODO: parse the written text from the tweet
         var start = this.text.search("-");
+        var parse = /#+/;
         var end = this.text.search("https");
         var ret = this.text.slice(start,end);
 
@@ -93,6 +94,33 @@ class Tweet {
 
     getHTMLTableRow(rowNumber:number):string {
         //TODO: return a table row which summarizes the tweet with a clickable link to the RunKeeper activity
-        return "<tr></tr>";
+        //$("#tweetTable").append$("<tr<tdhello</td><td>yo</td></tr>"));
+        var event;
+        var str = this.text
+        var parse = /http*/;
+        var index = str.search(parse);
+        var parseStr = str.slice(index, str.length);
+        var chop = parseStr.split(" ");
+        var linkIt = chop[0];
+        var hash = chop[1];
+        var linkStr = linkIt.link(linkIt);
+        var sub = str.substring(0, index-1);
+        sub = sub.concat(" ");
+        sub = sub.concat(linkStr);
+        sub = sub.concat(" ");
+        sub = sub.concat(hash); 
+        if(str.startsWith("Just c") == true || str.startsWith("Just p") == true){
+            event = "completed_event";
+        }
+        else if(str.startsWith("Watch") == true){
+            event = "live_event";
+        }
+        else if(str.startsWith("Achieved") == true){
+            event = "achievement";
+        }
+        else{
+            event = "miscellaneous";
+        }
+        return "<td>" + event + "</td><td>" + sub + "</td></tr>";
     }
 }

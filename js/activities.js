@@ -111,4 +111,18 @@ function parseTweets(runkeeper_tweets) {
 //Wait for the DOM to load
 $(document).ready(function() {
 	loadSavedRunkeeperTweets().then(parseTweets);
+	$("#liveButton").on("click", function(){
+	var $this = $(this);
+	if($this.text() == "Switch to live tweets"){
+		loadLiveRunkeeperTweets().then(parseTweets);
+		//$("#liveButton").text("Switch to saved tweets");
+		//location.reload();
+	}
+	else{
+		//fetch("twitter_proxy_config.json/1.1/search/tweets.json?q=#RunKeeper&lang-en")
+		loadSavedRunkeeperTweets().then(parseTweets);
+		
+		//$("#liveButton").text("Switch to live tweets");
+	}
+	});
 });
